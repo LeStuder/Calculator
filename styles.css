@@ -40,9 +40,12 @@ body {
 }
 
 #display > * {
+    display: flex;
+    align-items: center;
+    justify-content: end;
     margin: 0;
-    margin-right: 25px;
-    text-align: right;
+    height: 30%;
+    margin: 0 25px;
 }
 
 .input {
