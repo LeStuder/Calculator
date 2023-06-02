@@ -37,7 +37,10 @@ let inputStr = ""
 //EVENT LISTENERS
 //Numbers
 numberZero.addEventListener("click", () => {
-    addToInputStr("0")
+    const regexJustZeros = /^0+$/
+    if (regexJustZeros.test(getLastInputBlock())) {
+        addToInputStr("0")
+    }
 })
 numberOne.addEventListener("click", () => {
     addToInputStr("1")
@@ -69,40 +72,92 @@ numberNine.addEventListener("click", () => {
 
 //Dot
 numberDot.addEventListener("click", () => {
-    addToInputStr(".")
+    const regexDoesNotHaveDot = /\.+/g
+    const regexHasNumbersBeforeIt = /[0-9]+$/
+    if (regexDoesNotHaveDot.test(getLastInputBlock()) && regexHasNumbersBeforeIt.test(getLastInputBlock())) {
+        addToInputStr(".")
+    }
 })
 
 //Operands
 operandAddition.addEventListener("click", () => {
-    addToInputStr("+")
+    addOperandToStr("+")
 })
 operandSubtraction.addEventListener("click", () => {
-    addToInputStr("-")
+    addOperandToStr("-")
 })
 operandMultiplication.addEventListener("click", () => {
-    addToInputStr("*")
+    addOperandToStr("*")
 })
 operandDivision.addEventListener("click", () => {
-    addToInputStr("/")
+    addOperandToStr("/")
 })
 
 //Function Keys
 functionKeyLeftBracket.addEventListener("click", () => {
-    addToInputStr("(")
+    regexHasRightBracketBeforeIt = /\)+$/
+    if (inputStr.length === 0 || !regexHasRightBracketBeforeIt.test(getLastInputBlock)) {
+        addToInputStr("(")
+    }
 })
 functionKeyRightBracket.addEventListener("click", () => {
-    addToInputStr(")")
+    console.log("here")
+    console.log(JSON.stringify(countBrackets()))
+    if (countBrackets()[2] > 0) {
+        addToInputStr(")")
+    }
 })
-functionKeyClear.addEventListener("click", () => {})
-functionKeyDelete.addEventListener("click", () => {})
+functionKeyClear.addEventListener("click", () => {
+    inputStr = " "
+    updateDisplayInput()
+})
+functionKeyDelete.addEventListener("click", () => {
+    removeLastInput()
+})
 
 //FUNCTIONS
 
-function updateDisplayInput(input) {
+//returns [amountLeftBrackts, amountRightBrackets, openBrackets]
+function countBrackets() {
+    const amountLeftBrackets = inputStr.split("").filter((elem) => elem === "(").length
+    const amountRightBrackets = inputStr.split("").filter((elem) => elem === ")").length
+    const arr = [amountLeftBrackets, amountRightBrackets, amountLeftBrackets - amountRightBrackets]
+    return arr
+}
+
+function addOperandToStr(operand) {
+    //removes the operand before it to be able to replace it
+    regexHasNoNumberOrBracketBeforeIt = /[^0-9\)\(]$/
+    if (regexHasNoNumberOrBracketBeforeIt.test(getLastInputBlock())) {
+        removeLastInput()
+    }
+
+    //only add operands if there are already numbers in the string
+    const regexHasNoLeftBracketBeforeIt = /[^\(]+$/
+    if (inputStr.length > 0 && (regexHasNoLeftBracketBeforeIt.test(getLastInputBlock()) || operand === "-")) {
+        addToInputStr(operand)
+    }
+}
+
+//removes the last number/operand/bracket from the inputStr
+function removeLastInput() {
+    inputStr = inputStr.slice(0, inputStr.length - 1)
+    updateDisplayInput()
+}
+
+//Returns the last input block which is either a block of numbers(including dot) or a operand / bracket
+function getLastInputBlock() {
+    const regexLastInputBlock = /[0-9.]+$|[^0-9]+$/g
+    return inputStr.slice(inputStr.search(regexLastInputBlock))
+}
+
+//Updates display value when called
+function updateDisplayInput() {
     displayInput.textContent = inputStr
 }
 
+//Adds parameter to inputStr and updates Display Value
 function addToInputStr(val) {
     inputStr = inputStr.split("").concat(val).join("")
-    displayInput.textContent = inputStr
+    updateDisplayInput()
 }
