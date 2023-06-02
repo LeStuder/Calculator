@@ -1,0 +1,33 @@
+body {
+    background-color: #252525;
+}
+
+#calculator {
+    margin: 0 auto;
+    padding: 20px;
+    height: 540px;
+    width: 360px;
+    border-radius: 10px;
+    background-color: #ebebeb;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 2fr repeat(4, 1fr);
+    grid-template-areas: "display display display display" ". . . ." ". . . ." ". . . ." ". . . .";
+}
+
+#display {
+    grid-area: display;
+    padding: 10px;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    border-radius: 13px;
+    box-shadow: -5px -5px 8px rgba(255, 255, 255, 0.6), 5px 5px 8px rgba(70, 70, 70, 0.2);
+    font-family: Mulish, "Open Sans", sans;
+    font-size: 2em;
+    font-weight: 200;
+}
