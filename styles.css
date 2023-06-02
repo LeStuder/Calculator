@@ -31,3 +31,13 @@ body {
     font-size: 2em;
     font-weight: 200;
 }
+
+.input > p {
+    margin: 0;
+}
+
+.operand > p,
+#number-dot > p {
+    position: relative;
+    top: -3px;
+}
