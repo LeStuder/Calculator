@@ -1,5 +1,4 @@
-// vVARIABLE DECLARATIONS
-// Numbers
+//VARIABLE DECLARATIONS Numbers
 const numberZero = document.getElementById("number-0")
 const numberOne = document.getElementById("number-1")
 const numberTwo = document.getElementById("number-2")
@@ -11,34 +10,33 @@ const numberSeven = document.getElementById("number-7")
 const numberEight = document.getElementById("number-8")
 const numberNine = document.getElementById("number-9")
 
-//Dot
+//VARIABLE DECLARATIONS Dot
 const numberDot = document.getElementById("number-dot")
 
-//Operands
+//VARIABLE DECLARATIONS Operands
 const operandAddition = document.getElementById("operand-addition")
 const operandSubtraction = document.getElementById("operand-subtraction")
 const operandMultiplication = document.getElementById("operand-multiplication")
 const operandDivision = document.getElementById("operand-division")
 const operandCalculate = document.getElementById("operand-calculate")
 
-//Function Keys
+//VARIABLE DECLARATIONS Function Keys
 const functionKeyLeftBracket = document.getElementById("function-left-bracket")
 const functionKeyRightBracket = document.getElementById("function-right-bracket")
 const functionKeyClear = document.getElementById("function-clear")
 const functionKeyDelete = document.getElementById("function-delete")
 
-//Display
+//VARIABLE DECLARATIONS Display
 const displayInput = document.getElementById("display-input")
 const displayResult = document.getElementById("display-result")
 
 //Variables used in Functions
 let inputStr = ""
 
-//EVENT LISTENERS
-//Numbers
+//EVENT LISTENERS Numbers
 numberZero.addEventListener("click", () => {
-    const regexJustZeros = /^0+$/
-    if (regexJustZeros.test(getLastInputBlock())) {
+    const regexJustZeros = /^[0]+$/
+    if (inputStr.length === 0 || !regexJustZeros.test(getLastInputBlock())) {
         addToInputStr("0")
     }
 })
@@ -70,16 +68,16 @@ numberNine.addEventListener("click", () => {
     addToInputStr("9")
 })
 
-//Dot
+//EVENT LISTENER Dot
 numberDot.addEventListener("click", () => {
-    const regexDoesNotHaveDot = /\.+/g
+    const regexHasDot = /[\.]+/
     const regexHasNumbersBeforeIt = /[0-9]+$/
-    if (regexDoesNotHaveDot.test(getLastInputBlock()) && regexHasNumbersBeforeIt.test(getLastInputBlock())) {
+    if (!regexHasDot.test(getLastInputBlock()) && regexHasNumbersBeforeIt.test(getLastInputBlock())) {
         addToInputStr(".")
     }
 })
 
-//Operands
+//EVENT LISTENERS Operands
 operandAddition.addEventListener("click", () => {
     addOperandToStr("+")
 })
@@ -93,7 +91,7 @@ operandDivision.addEventListener("click", () => {
     addOperandToStr("/")
 })
 
-//Function Keys
+//EVENT LISTENERS Function Keys
 functionKeyLeftBracket.addEventListener("click", () => {
     regexHasRightBracketBeforeIt = /\)+$/
     if (inputStr.length === 0 || !regexHasRightBracketBeforeIt.test(getLastInputBlock)) {
@@ -101,9 +99,8 @@ functionKeyLeftBracket.addEventListener("click", () => {
     }
 })
 functionKeyRightBracket.addEventListener("click", () => {
-    console.log("here")
-    console.log(JSON.stringify(countBrackets()))
     if (countBrackets()[2] > 0) {
+        removeOperandBeforeIt()
         addToInputStr(")")
     }
 })
@@ -116,8 +113,7 @@ functionKeyDelete.addEventListener("click", () => {
 })
 
 //FUNCTIONS
-
-//returns [amountLeftBrackts, amountRightBrackets, openBrackets]
+//returns [amountLeftBrackets, amountRightBrackets, openBrackets]
 function countBrackets() {
     const amountLeftBrackets = inputStr.split("").filter((elem) => elem === "(").length
     const amountRightBrackets = inputStr.split("").filter((elem) => elem === ")").length
@@ -125,14 +121,43 @@ function countBrackets() {
     return arr
 }
 
-function addOperandToStr(operand) {
+//removes unneccessary zeros in cases as 00.0, 1.0 and 0.0200
+function removeUnneccessaryZeros() {
+    const regexHasOnlyOneZero = /^[0]+$/
+    const regexHasOnlyZerosAfterDot = /^[0]\.[0]*$/
+    const regexLastInputBlock = /[0-9.]+$|[^0-9]+$/g
+    const regexHasZerosAfterLastDecimalPlace = /(?<=[\.0-9])[0]+$/
+    console.log("there")
+
+    //prevents more than one lone zero before the decimal point (prevents 00.02)
+    if (regexHasOnlyOneZero.test(getLastInputBlock())) {
+        console.log("here")
+        inputStr = inputStr.replace(regexLastInputBlock, "0")
+        updateDisplayInput()
+    }
+
+    //removes unneccessary zeros after the last (number after the) decimal point -> (prevents 0.0200 and 0.00)
+    if (regexHasZerosAfterLastDecimalPlace.test(getLastInputBlock())) {
+        console.log("down here")
+        inputStr = inputStr.replace(regexHasZerosAfterLastDecimalPlace, "")
+        updateDisplayInput
+    }
+}
+
+function removeOperandBeforeIt() {
     //removes the operand before it to be able to replace it
     regexHasNoNumberOrBracketBeforeIt = /[^0-9\)\(]$/
     if (regexHasNoNumberOrBracketBeforeIt.test(getLastInputBlock())) {
         removeLastInput()
     }
+}
 
-    //only add operands if there are already numbers in the string
+//removes unneccessary zeros and operand before it and
+function addOperandToStr(operand) {
+    removeUnneccessaryZeros()
+    removeOperandBeforeIt()
+
+    //only add operands if there are already numbers in the string, exception is the minus operand to indicate negative numbers
     const regexHasNoLeftBracketBeforeIt = /[^\(]+$/
     if (inputStr.length > 0 && (regexHasNoLeftBracketBeforeIt.test(getLastInputBlock()) || operand === "-")) {
         addToInputStr(operand)
