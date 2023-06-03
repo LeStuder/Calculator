@@ -135,18 +135,15 @@ function removeUnneccessaryZeros() {
     const regexHasOnlyZerosAfterDot = /^[0]\.[0]*$/
     const regexLastInputBlock = /[0-9.]+$|[^0-9]+$/g
     const regexHasZerosAfterLastDecimalPlace = /(?<=[\.0-9])[0]+$/
-    console.log("there")
 
     //prevents more than one lone zero before the decimal point (prevents 00.02)
     if (regexHasOnlyOneZero.test(getLastInputBlock())) {
-        console.log("here")
         inputStr = inputStr.replace(regexLastInputBlock, "0")
         updateDisplayInput()
     }
 
     //removes unneccessary zeros after the last (number after the) decimal point -> (prevents 0.0200 and 0.00)
     if (regexHasZerosAfterLastDecimalPlace.test(getLastInputBlock())) {
-        console.log("down here")
         inputStr = inputStr.replace(regexHasZerosAfterLastDecimalPlace, "")
         updateDisplayInput
     }
