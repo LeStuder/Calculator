@@ -21,6 +21,7 @@ function checkAllBracketsClosed(str) {
         updateResults(countBrackets(str)[2] + " open brackets")
         return false
     }
+
     return true
 }
 
@@ -49,29 +50,82 @@ function replaceMultiplyBracketShorthand(str) {
     }
 
     return returnStr
+}
 
-    //Create a array from all the matches and then manipulate each element that there is a subarray [before, after]
-    //where the after has a multiply symbol between the bracket and the number.
-    //Then make a for loop for all subarray and replace the before with the after
+function calculateMDAS(str) {
+    let returnStr = str
+    const regexFirstNumber = /^([0-9]+[\.]*[0-9]*)/
+    const regexSecondNumber = /([0-9]+[\.]*[0-9]*)$/
+    const regexToMultiply = /[0-9]*[\.]*[0-9]+[*][0-9]+[\.]*[0-9]*/
+    const regexToDivide = /[0-9]*[\.]*[0-9]+[\/][0-9]+[\.]*[0-9]*/
+    const regexToAdd = /[0-9]*[\.]*[0-9]+[+][0-9]+[\.]*[0-9]*/
+    const regexToSubtract = /[0-9]*[\.]*[0-9]+[-][0-9]+[\.]*[0-9]*/
+
+    //Multiplication
+    while (regexToMultiply.test(returnStr)) {
+        const toMultiplyStr = returnStr.match(regexToMultiply)[0]
+        const firstNumber = toMultiplyStr.match(regexFirstNumber)[0]
+        const secondNumber = toMultiplyStr.match(regexSecondNumber)[0]
+        const calculatedNumber = parseFloat(firstNumber) * parseFloat(secondNumber)
+        returnStr = returnStr.replace(toMultiplyStr, calculatedNumber.toString())
+    }
+    //Division
+    while (regexToDivide.test(returnStr)) {
+        const toDivideStr = returnStr.match(regexToDivide)[0]
+        const firstNumber = toDivideStr.match(regexFirstNumber)[0]
+        const secondNumber = toDivideStr.match(regexSecondNumber)[0]
+        if (secondNumber === "0") {
+            console.log("division by 0")
+            //create solution to finish function and display this
+        }
+        const calculatedNumber = parseFloat(firstNumber) / parseFloat(secondNumber)
+        returnStr = returnStr.replace(toDivideStr, calculatedNumber.toString())
+    }
+    //Addition
+    while (regexToAdd.test(returnStr)) {
+        const toAddStr = returnStr.match(regexToAdd)[0]
+        const firstNumber = toAddStr.match(regexFirstNumber)[0]
+        const secondNumber = toAddStr.match(regexSecondNumber)[0]
+        const calculatedNumber = parseFloat(firstNumber) + parseFloat(secondNumber)
+        returnStr = returnStr.replace(toAddStr, calculatedNumber.toString())
+    }
+    //Subtraction
+    while (regexToSubtract.test(returnStr)) {
+        const toSubtractStr = returnStr.match(regexToSubtract)[0]
+        const firstNumber = toSubtractStr.match(regexFirstNumber)[0]
+        const secondNumber = toSubtractStr.match(regexSecondNumber)[0]
+        const calculatedNumber = parseFloat(firstNumber) - parseFloat(secondNumber)
+        returnStr = returnStr.replace(toSubtractStr, calculatedNumber.toString())
+    }
+
+    return returnStr
+}
+
+console.log("Output calculateMDAS: " + calculateMDAS("3*2+3*4-1/5"))
+console.log("Output removeBrackets: " + removeUnneccessaryBrackets("(34+3)+(3)-2"))
+
+function removeUnneccessaryBrackets(str) {
+    let returnStr = str
+    const regexBracketWithOneNumber = /[\(][0-9]+[\.]*[0-9]*[\)]/g
+    let bracketArr = returnStr.match(regexBracketWithOneNumber)
+    bracketArr.map((numberWithBrackets) => {
+        const numberWithoutBrackets = numberWithBrackets.slice(1, numberWithBrackets.length - 1)
+        returnStr = returnStr.replace(numberWithBrackets, numberWithoutBrackets)
+    })
+
+    return returnStr
 }
 
 /*
 
-function replaceMultiplyBracketShorthand to replace 5( with 5*( and )3 with )*3{
+function that loops through all brackets and calculates each individual bracket
 
-}
+make somehow sure that the following negative-number-cases are handled:
+3+(-1)
+3+(-1*5)
+-1+3
+So, everywhere were we search for a bracket or first/second numbers make sure that negative-signs are included
 
-function calculateMDAS() to calculate without bracket according to mdas{
-    
-}
-
-function to search for (2 + 5) and give content to calculateMDAS{
-
-}
-
-function to replace (7) with 7 {
-
-}
 
 while-loop till the string doesnt have any brackets anymore
 calculateMDAS one last time
