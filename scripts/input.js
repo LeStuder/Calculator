@@ -1,3 +1,5 @@
+import { calculate } from "./calculate.js"
+
 //VARIABLE DECLARATIONS Numbers
 
 console.log("using JS!")
@@ -21,6 +23,7 @@ const operandAddition = document.getElementById("operand-addition")
 const operandSubtraction = document.getElementById("operand-subtraction")
 const operandMultiplication = document.getElementById("operand-multiplication")
 const operandDivision = document.getElementById("operand-division")
+const operandCalculate = document.getElementById("operand-calculate")
 
 //VARIABLE DECLARATIONS Function Keys
 const functionKeyLeftBracket = document.getElementById("function-left-bracket")
@@ -90,6 +93,9 @@ operandMultiplication.addEventListener("click", () => {
 })
 operandDivision.addEventListener("click", () => {
     addOperandToStr("/")
+})
+operandCalculate.addEventListener("click", () => {
+    calculate(inputStr)
 })
 
 //EVENT LISTENERS Function Keys
