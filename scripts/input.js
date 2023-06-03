@@ -1,4 +1,7 @@
 //VARIABLE DECLARATIONS Numbers
+
+console.log("using JS!")
+
 const numberZero = document.getElementById("number-0")
 const numberOne = document.getElementById("number-1")
 const numberTwo = document.getElementById("number-2")
@@ -18,7 +21,6 @@ const operandAddition = document.getElementById("operand-addition")
 const operandSubtraction = document.getElementById("operand-subtraction")
 const operandMultiplication = document.getElementById("operand-multiplication")
 const operandDivision = document.getElementById("operand-division")
-const operandCalculate = document.getElementById("operand-calculate")
 
 //VARIABLE DECLARATIONS Function Keys
 const functionKeyLeftBracket = document.getElementById("function-left-bracket")
@@ -28,7 +30,6 @@ const functionKeyDelete = document.getElementById("function-delete")
 
 //VARIABLE DECLARATIONS Display
 const displayInput = document.getElementById("display-input")
-const displayResult = document.getElementById("display-result")
 
 //Variables used in Functions
 let inputStr = ""
@@ -93,13 +94,13 @@ operandDivision.addEventListener("click", () => {
 
 //EVENT LISTENERS Function Keys
 functionKeyLeftBracket.addEventListener("click", () => {
-    regexHasRightBracketBeforeIt = /\)+$/
+    const regexHasRightBracketBeforeIt = /\)+$/
     if (inputStr.length === 0 || !regexHasRightBracketBeforeIt.test(getLastInputBlock)) {
         addToInputStr("(")
     }
 })
 functionKeyRightBracket.addEventListener("click", () => {
-    if (countBrackets()[2] > 0) {
+    if (countBrackets(inputStr)[2] > 0) {
         removeOperandBeforeIt()
         addToInputStr(")")
     }
@@ -114,9 +115,10 @@ functionKeyDelete.addEventListener("click", () => {
 
 //FUNCTIONS
 //returns [amountLeftBrackets, amountRightBrackets, openBrackets]
-function countBrackets() {
-    const amountLeftBrackets = inputStr.split("").filter((elem) => elem === "(").length
-    const amountRightBrackets = inputStr.split("").filter((elem) => elem === ")").length
+//is being exported
+function countBrackets(str) {
+    const amountLeftBrackets = str.split("").filter((elem) => elem === "(").length
+    const amountRightBrackets = str.split("").filter((elem) => elem === ")").length
     const arr = [amountLeftBrackets, amountRightBrackets, amountLeftBrackets - amountRightBrackets]
     return arr
 }
@@ -146,7 +148,7 @@ function removeUnneccessaryZeros() {
 
 function removeOperandBeforeIt() {
     //removes the operand before it to be able to replace it
-    regexHasNoNumberOrBracketBeforeIt = /[^0-9\)\(]$/
+    const regexHasNoNumberOrBracketBeforeIt = /[^0-9\)\(]$/
     if (regexHasNoNumberOrBracketBeforeIt.test(getLastInputBlock())) {
         removeLastInput()
     }
@@ -186,3 +188,5 @@ function addToInputStr(val) {
     inputStr = inputStr.split("").concat(val).join("")
     updateDisplayInput()
 }
+
+export { countBrackets }
