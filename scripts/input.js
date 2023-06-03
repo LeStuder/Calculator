@@ -132,7 +132,6 @@ function countBrackets(str) {
 //removes unneccessary zeros in cases as 00.0, 1.0 and 0.0200
 function removeUnneccessaryZeros() {
     const regexHasOnlyOneZero = /^[0]+$/
-    const regexHasOnlyZerosAfterDot = /^[0]\.[0]*$/
     const regexLastInputBlock = /[0-9.]+$|[^0-9]+$/g
     const regexHasZerosAfterLastDecimalPlace = /(?<=[\.0-9])[0]+$/
 
