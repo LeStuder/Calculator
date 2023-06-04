@@ -54,8 +54,8 @@ function replaceMultiplyBracketShorthand(str) {
 
 function calculateMDAS(str) {
     let returnStr = str
-    const regexFirstNumber = /^([0-9]+[\.]*[0-9]*)/
-    const regexSecondNumber = /([0-9]+[\.]*[0-9]*)$/
+    const regexFirstNumber = /^([-]*[0-9]+[\.]*[0-9]*)/
+    const regexSecondNumber = /([-]*[0-9]+[\.]*[0-9]*)$/
     const regexToMultiply =
         /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[*]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
     const regexToDivide =
