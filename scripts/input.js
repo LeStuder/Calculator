@@ -98,13 +98,13 @@ operandCalculate.addEventListener("click", () => {
 
 //EVENT LISTENERS Function Keys
 functionKeyLeftBracket.addEventListener("click", () => {
-    const regexHasRightBracketBeforeIt = /\)+$/
-    if (inputStr.length === 0 || !regexHasRightBracketBeforeIt.test(getLastInputBlock)) {
+    if (inputStr.length === 0) {
         addToInputStr("(")
     }
 })
 functionKeyRightBracket.addEventListener("click", () => {
-    if (countBrackets(inputStr)[2] > 0) {
+    const regexHasLeftBracketBeforeIt = /[\(]+$/
+    if (countBrackets(inputStr)[2] > 0 && !regexHasLeftBracketBeforeIt.test(getLastInputBlock())) {
         removeOperandBeforeIt()
         addToInputStr(")")
     }
@@ -112,12 +112,13 @@ functionKeyRightBracket.addEventListener("click", () => {
 functionKeyClear.addEventListener("click", () => {
     inputStr = " "
     updateDisplayInput()
-    updateResults
+    updateResults("")
 })
 functionKeyDelete.addEventListener("click", () => {
     removeLastInput()
 })
 
+//EVENT LISTENER Keyboard events
 document.addEventListener("keydown", (event) => {
     switch (event.key) {
         case "0":
