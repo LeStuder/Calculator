@@ -1,6 +1,4 @@
-import { countBrackets } from "./input.js"
-
-const displayResult = document.getElementById("display-result")
+import { countBrackets, updateResults } from "./input.js"
 
 function calculate(inputStr) {
     let resultStr = inputStr
@@ -35,10 +33,6 @@ function checkAllBracketsClosed(str) {
     }
 
     return true
-}
-
-function updateResults(str) {
-    displayResult.textContent = str
 }
 
 function replaceMultiplyBracketShorthand(str) {

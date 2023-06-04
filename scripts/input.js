@@ -30,6 +30,7 @@ const functionKeyDelete = document.getElementById("function-delete")
 
 //VARIABLE DECLARATIONS Display
 const displayInput = document.getElementById("display-input")
+const displayResult = document.getElementById("display-result")
 
 //Variables used in Functions
 let inputStr = ""
@@ -111,9 +112,73 @@ functionKeyRightBracket.addEventListener("click", () => {
 functionKeyClear.addEventListener("click", () => {
     inputStr = " "
     updateDisplayInput()
+    updateResults
 })
 functionKeyDelete.addEventListener("click", () => {
     removeLastInput()
+})
+
+document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "0":
+            numberZero.click()
+            break
+        case "1":
+            numberOne.click()
+            break
+        case "2":
+            numberTwo.click()
+            break
+        case "3":
+            numberThree.click()
+            break
+        case "4":
+            numberFour.click()
+            break
+        case "5":
+            numberFive.click()
+            break
+        case "6":
+            numberSix.click()
+            break
+        case "7":
+            numberSeven.click()
+            break
+        case "8":
+            numberEight.click()
+            break
+        case "9":
+            numberNine.click()
+            break
+        case "+":
+            operandAddition.click()
+            break
+        case "-":
+            operandSubtraction.click()
+            break
+        case "*":
+            operandMultiplication.click()
+            break
+        case "/":
+            operandDivision.click()
+            break
+        case "=":
+        case "Enter":
+            operandCalculate.click()
+            break
+        case "Backspace":
+            functionKeyDelete.click()
+            break
+        case "Delete":
+            functionKeyClear.click()
+            break
+        case "(":
+            functionKeyLeftBracket.click()
+            break
+        case ")":
+            functionKeyRightBracket.click()
+            break
+    }
 })
 
 //FUNCTIONS
@@ -177,9 +242,14 @@ function getLastInputBlock() {
     return inputStr.slice(inputStr.search(regexLastInputBlock))
 }
 
-//Updates display value when called
+//Updates displayInput value
 function updateDisplayInput() {
     displayInput.textContent = inputStr
+}
+
+//Updates displayResult value
+function updateResults(str) {
+    displayResult.textContent = str
 }
 
 //Adds parameter to inputStr and updates Display Value
@@ -188,4 +258,4 @@ function addToInputStr(val) {
     updateDisplayInput()
 }
 
-export { countBrackets }
+export { countBrackets, updateResults }
