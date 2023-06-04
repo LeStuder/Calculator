@@ -105,12 +105,12 @@ function calculateMDAS(str) {
     return returnStr
 }
 
-console.log("Output calculateMDAS: " + calculateMDAS("3*2+3*4-1/5"))
-console.log("Output removeBrackets: " + removeUnneccessaryBrackets("(34+3)+(-3)-2"))
+console.log("Output calculateMDAS: " + calculateMDAS("3*-2+(8/-2)"))
+console.log("Output removeBrackets: " + removeUnneccessaryBrackets("-6+(-4)"))
 
 function removeUnneccessaryBrackets(str) {
     let returnStr = str
-    const regexBracketWithOneNumber = /[\(][0-9]+[\.]*[0-9]*[\)]/g
+    const regexBracketWithOneNumber = /[\(][-][0-9]+[\.]*[0-9]*[\)]/g
     let bracketArr = returnStr.match(regexBracketWithOneNumber)
     console.log("bracketArr: " + JSON.stringify(bracketArr))
     if (bracketArr) {
