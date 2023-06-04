@@ -56,10 +56,14 @@ function calculateMDAS(str) {
     let returnStr = str
     const regexFirstNumber = /^([0-9]+[\.]*[0-9]*)/
     const regexSecondNumber = /([0-9]+[\.]*[0-9]*)$/
-    const regexToMultiply = /[0-9]*[\.]*[0-9]+[*][0-9]+[\.]*[0-9]*/
-    const regexToDivide = /[0-9]*[\.]*[0-9]+[\/][0-9]+[\.]*[0-9]*/
-    const regexToAdd = /[0-9]*[\.]*[0-9]+[+][0-9]+[\.]*[0-9]*/
-    const regexToSubtract = /[0-9]*[\.]*[0-9]+[-][0-9]+[\.]*[0-9]*/
+    const regexToMultiply =
+        /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[*]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
+    const regexToDivide =
+        /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[\/]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
+    const regexToAdd =
+        /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[+]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
+    const regexToSubtract =
+        /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[-]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
 
     //Multiplication
     while (regexToMultiply.test(returnStr)) {
@@ -102,16 +106,19 @@ function calculateMDAS(str) {
 }
 
 console.log("Output calculateMDAS: " + calculateMDAS("3*2+3*4-1/5"))
-console.log("Output removeBrackets: " + removeUnneccessaryBrackets("(34+3)+(3)-2"))
+console.log("Output removeBrackets: " + removeUnneccessaryBrackets("(34+3)+(-3)-2"))
 
 function removeUnneccessaryBrackets(str) {
     let returnStr = str
     const regexBracketWithOneNumber = /[\(][0-9]+[\.]*[0-9]*[\)]/g
     let bracketArr = returnStr.match(regexBracketWithOneNumber)
-    bracketArr.map((numberWithBrackets) => {
-        const numberWithoutBrackets = numberWithBrackets.slice(1, numberWithBrackets.length - 1)
-        returnStr = returnStr.replace(numberWithBrackets, numberWithoutBrackets)
-    })
+    console.log("bracketArr: " + JSON.stringify(bracketArr))
+    if (bracketArr) {
+        bracketArr.map((numberWithBrackets) => {
+            const numberWithoutBrackets = numberWithBrackets.slice(1, numberWithBrackets.length - 1)
+            returnStr = returnStr.replace(numberWithBrackets, numberWithoutBrackets)
+        })
+    }
 
     return returnStr
 }
@@ -122,10 +129,12 @@ function that loops through all brackets and calculates each individual bracket
 
 make somehow sure that the following negative-number-cases are handled:
 3+(-1)
+3*(-2)
 3+(-1*5)
 -1+3
 So, everywhere were we search for a bracket or first/second numbers make sure that negative-signs are included
 
+finish calculateMDAS.division
 
 while-loop till the string doesnt have any brackets anymore
 calculateMDAS one last time

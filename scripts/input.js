@@ -1,9 +1,6 @@
 import { calculate } from "./calculate.js"
 
 //VARIABLE DECLARATIONS Numbers
-
-console.log("using JS!")
-
 const numberZero = document.getElementById("number-0")
 const numberOne = document.getElementById("number-1")
 const numberTwo = document.getElementById("number-2")
@@ -148,8 +145,8 @@ function removeUnneccessaryZeros() {
     }
 }
 
+//removes the operand before it to be able to replace it
 function removeOperandBeforeIt() {
-    //removes the operand before it to be able to replace it
     const regexHasNoNumberOrBracketBeforeIt = /[^0-9\)\(]$/
     if (regexHasNoNumberOrBracketBeforeIt.test(getLastInputBlock())) {
         removeLastInput()
