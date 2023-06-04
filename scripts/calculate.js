@@ -11,10 +11,22 @@ function calculate(inputStr) {
     }
 
     resultStr = replaceMultiplyBracketShorthand(resultStr)
-    console.log(resultStr)
-}
+    console.log("replaceMultiplyBracketShorthand: " + resultStr)
 
-// Pseudocode
+    do {
+        resultStr = replaceMultiplyBracketShorthand(resultStr)
+        resultStr = removeUnneccessaryBrackets(resultStr)
+        resultStr = calculateMDAS(resultStr)
+        if (resultStr === false) {
+            updateResults("Division by 0")
+            return
+        }
+
+        console.log("resultStr: " + resultStr)
+    } while (countBrackets(resultStr)[0] > 0)
+
+    updateResults(resultStr)
+}
 
 function checkAllBracketsClosed(str) {
     if (countBrackets(str)[2] > 0) {
@@ -31,10 +43,16 @@ function updateResults(str) {
 
 function replaceMultiplyBracketShorthand(str) {
     let returnStr = str
+    const regexTwoBracketsMultiply = /[\)][\(]/g
     const regexLeftBracketHasNumberBeforeIt = /[0-9]*[\.]*[0-9]+[\(]/g
     const regexRightBracketHasNumberAfterIt = /[\)][0-9]+[\.]*[0-9]*/g
+    const twoBracketsArr = returnStr.match(regexTwoBracketsMultiply)
     const leftBracketArr = returnStr.match(regexLeftBracketHasNumberBeforeIt)
     const rightBracketArr = returnStr.match(regexRightBracketHasNumberAfterIt)
+
+    for (let i in twoBracketsArr) {
+        returnStr = returnStr.replace(")(", ")*(")
+    }
 
     for (let i in leftBracketArr) {
         const before = leftBracketArr[i]
@@ -53,9 +71,10 @@ function replaceMultiplyBracketShorthand(str) {
 }
 
 function calculateMDAS(str) {
+    console.log("in calculateMDAS with str: " + str)
     let returnStr = str
     const regexFirstNumber = /^([-]*[0-9]+[\.]*[0-9]*)/
-    const regexSecondNumber = /([-]*[0-9]+[\.]*[0-9]*)$/
+    const regexSecondNumber = /((?<=[+\-\/*])[-]*[0-9]+[\.]*[0-9]*)$/
     const regexToMultiply =
         /((?<=[+\-\/*]|)[-]{1}[\d]+[\.][\d]+|(?<=[+\-\/*]|)[-][\d]+|[\d]*[\.]*[\d]+)[*]([-][\d]+[\.][\d]+|[-][\d]+|[\d]*[\.]*[\d]+)/
     const regexToDivide =
@@ -80,7 +99,7 @@ function calculateMDAS(str) {
         const secondNumber = toDivideStr.match(regexSecondNumber)[0]
         if (secondNumber === "0") {
             console.log("division by 0")
-            //create solution to finish function and display this
+            return false
         }
         const calculatedNumber = parseFloat(firstNumber) / parseFloat(secondNumber)
         returnStr = returnStr.replace(toDivideStr, calculatedNumber.toString())
@@ -98,6 +117,8 @@ function calculateMDAS(str) {
         const toSubtractStr = returnStr.match(regexToSubtract)[0]
         const firstNumber = toSubtractStr.match(regexFirstNumber)[0]
         const secondNumber = toSubtractStr.match(regexSecondNumber)[0]
+        console.log("first: " + firstNumber)
+        console.log("second: " + secondNumber)
         const calculatedNumber = parseFloat(firstNumber) - parseFloat(secondNumber)
         returnStr = returnStr.replace(toSubtractStr, calculatedNumber.toString())
     }
@@ -105,14 +126,10 @@ function calculateMDAS(str) {
     return returnStr
 }
 
-console.log("Output calculateMDAS: " + calculateMDAS("3*-2+(8/-2)"))
-console.log("Output removeBrackets: " + removeUnneccessaryBrackets("-6+(-4)"))
-
 function removeUnneccessaryBrackets(str) {
     let returnStr = str
-    const regexBracketWithOneNumber = /[\(][-][0-9]+[\.]*[0-9]*[\)]/g
+    const regexBracketWithOneNumber = /[\(][-]*[0-9]+[\.]*[0-9]*[\)]/g
     let bracketArr = returnStr.match(regexBracketWithOneNumber)
-    console.log("bracketArr: " + JSON.stringify(bracketArr))
     if (bracketArr) {
         bracketArr.map((numberWithBrackets) => {
             const numberWithoutBrackets = numberWithBrackets.slice(1, numberWithBrackets.length - 1)
@@ -125,20 +142,7 @@ function removeUnneccessaryBrackets(str) {
 
 /*
 
-function that loops through all brackets and calculates each individual bracket
-
-make somehow sure that the following negative-number-cases are handled:
-3+(-1)
-3*(-2)
-3+(-1*5)
--1+3
-So, everywhere were we search for a bracket or first/second numbers make sure that negative-signs are included
-
-finish calculateMDAS.division
-
-while-loop till the string doesnt have any brackets anymore
-calculateMDAS one last time
-output to displayResult
+Handle Floating-Point Errors
 
 */
 
